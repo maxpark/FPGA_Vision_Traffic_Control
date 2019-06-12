@@ -41,8 +41,9 @@ Potential benefits of our project include reduced traffic congestion, saving tim
 - /ref              : Research papers and videos. Large files gitignore'd
 - /sim              : Simulator
 
-## Rules
+## NOTE
 
 * Always gitignore large files and jupyter notebooks
+* Data files should be uploaded to this [Onedrive folder](https://uniofmora-my.sharepoint.com/personal/150707v_uom_lk/Documents/Forms/All.aspx?cid=ecc15985-269e-4fe1-a009-cd91511a387c&RootFolder=%2Fpersonal%2F150707v_uom_lk%2FDocuments%2FFYP_ABRUTECH&FolderCTID=0x012000971CF71F2CBB3D44B99A93C2B41A99C7)
 * Start jupyter notebook names with your name: aba_yolov2_exp.ipynb
 * Do not edit another person's jupyter notebook. Always copy and rename it with yours. Once experiment is complete, create a .py file with proper code.
