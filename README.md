@@ -1,7 +1,7 @@
 # System Design for Vision Based Traffic Sensing (FYP)
 Customized digital architecture  to optimally implement a 20+ layer CNN on ZYNQ FPGA to detect traffic level from video feed and control traffic light timings accordingly.
 
-![YOLOv2 inference on night time traffic data collected with our device at Piliyandala, Sri Lanka]("docs/data_collection/4 yolo output (1).jpeg")
+![YOLOv2 inference on night time traffic data collected with our device at Piliyandala, Sri Lanka](docs/data_collection/4_yolo_output_2.png)
 
 Group Members : Abarajithan G., Fonseka T.T., Wickramasinghe W.M.R.R., Wimalasuriya C. 
 Supervisor    : Prof. Rohan Munasinghe 
