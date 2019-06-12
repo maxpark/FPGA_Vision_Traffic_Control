@@ -23,9 +23,11 @@ Potential benefits of our project include reduced traffic congestion, saving tim
   - /fpga           : Verilog files, Vivado projects
   - /simulations    : Modelsim simulations
 - /collection_device: Rasberry pi / Nano codes and relevent device
-- /data             : Datasets. Generally gitignored
+- /large            : Large files (gitignored)
   - /explore        : Jupyter notebooks for exploration
+  - /piliyandala_dataset
   - /preliminary    : Initial data, high_res are gitignored
+  - /weights        : Weights of NNs
 - /docs             : Documentation, reports, figures, images of progress
 - /nn               : Tensorflow / keras / numpy experiements on CNN architectures
   - /framework      : Keras-like numpy framework for testing CNNs
