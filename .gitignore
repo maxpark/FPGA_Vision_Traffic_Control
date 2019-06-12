@@ -1,0 +1,8 @@
+# Ignore large folder
+large/
+
+# Ignore all jupyter notebooks. (Common notebooks can be manually pushed by: git add -f filename.ipynb)
+*.ipynb
+*.ipynb_checkpoints*
+
+#Ignore these large files:
