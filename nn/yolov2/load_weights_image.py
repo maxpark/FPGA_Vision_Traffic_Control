@@ -13,7 +13,7 @@ try:
 except:
     pass
 
-f = h5py.File('yolov2.h5')
+f = h5py.File('../../large/weights/yolov2.h5')
 model_weights = f['model_weights']
 
 

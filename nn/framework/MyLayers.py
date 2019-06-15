@@ -365,11 +365,6 @@ class MyConv(MyLayer):
         else:
             self.fuse_bn(bn_weights)
         
-        # Encode weights & biases:
-        self.weights = self.encode(self.weights)
-        self.weights_flipped = self.encode(self.weights_flipped)
-        self.biases = self.encode(self.biases)
-        
             
     def np_out(self,in_data):
         
@@ -377,43 +372,16 @@ class MyConv(MyLayer):
         n_samples, in_h, in_w, in_data_ch_n = in_data.shape        
         assert in_data_ch_n == self.in_ch_n
 
-        # Decode
-        in_data = self.decode(in_data)
-        self.weights_flipped = self.decode(self.weights_flipped)
-        self.biases = self.decode(self.biases)
+        # Encode and decode
+        in_data_dec = self.decode(in_data)
+        self.biases_enc = self.encode(self.biases)
+        self.biases_dec = self.decode(self.biases)
+        self.weights_enc = self.encode(self.weights)
+        self.weights_dec = self.decode(self.weights)
 
-        out = np.empty((n_samples,in_h, in_w, self.out_ch_n), dtype = self.np_dtype)
+        out = self.conv2d_einsum(in_data_dec, self.weights_dec)
+        out += self.biases_dec
         
-        # Float16 not supported by convolve2d
-        if self.np_dtype == np.float16:
-            in_data = in_data.astype(np.float32)
-            out = out.astype(np.float32)
-            self.weights_flipped = self.weights_flipped.astype(np.float32)
-            self.biases = self.biases.astype(np.float32)
-            
-        
-        for out_ch_i in range(self.out_ch_n):
-            out_ch = np.zeros((in_h, in_w))
-            for in_ch_i in range(self.in_ch_n):                
-                out_ch += convolve2d(in_data[0,:,:,in_ch_i], 
-                                     self.weights_flipped[:,:,
-                                            in_ch_i,
-                                            out_ch_i], 
-                                     mode ='same')
-                
-            out_ch += self.biases[out_ch_i]
-            out[0,:,:,out_ch_i] = out_ch
-        
-        # Float16 not supported by convolve2d
-        if self.np_dtype == np.float16:
-            in_data = in_data.astype(self.np_dtype)
-            out = out.astype(self.np_dtype)
-            self.weights_flipped = self.weights_flipped.astype(self.np_dtype)
-            self.biases = self.biases.astype(self.np_dtype)
-        
-        # Encode
-        self.weights_flipped = self.encode(self.weights_flipped)
-        self.biases = self.encode(self.biases)
         self.np_out_data = self.encode(out)
         
         return self.np_out_data
@@ -501,6 +469,55 @@ class MyConv(MyLayer):
                                            model.inputs[0].op.name+':0': in_data})
         
         return self.keras_out_data
+
+    @staticmethod
+    def conv2d_einsum(img,kernel):
+        pad_h = kernel.shape[0]//2
+        pad_w = kernel.shape[1]//2
+        img_pad     = np.pad(img[0],((pad_h,pad_h),(pad_w,pad_w),(0,0)),'constant')
+
+        sub_shape   = tuple(np.subtract(img_pad.shape, kernel.shape[0:-1]) + 1)
+        strd        = np.lib.stride_tricks.as_strided
+        submatrices = strd(img_pad,kernel.shape[0:-1] + sub_shape,img_pad.strides * 2, writeable=False)
+
+        out = np.einsum('ijkl,ijkmno->mnl', kernel, submatrices,optimize='greedy')[np.newaxis,:]
+        
+        return out
+
+    @staticmethod
+    def conv2d_tf(img,kernel,q=None):
+        img_t       = tf.convert_to_tensor(img)
+        kernel_t    = tf.convert_to_tensor(kernel)
+        out_t       = tf.nn.conv2d(img_t,kernel_t,strides=(1,1,1,1),padding="SAME")
+        
+        sess        = tf.get_default_session()
+        if sess == None:
+            sess = tf.Session()
+            
+        out = sess.run(out_t)
+
+        if q == None:
+            return out
+        else:
+            q.put(out)
+    
+    @staticmethod
+    def conv2d_scipy(img,kernel):
+        kernel_flipped              = np.flip(kernel, (0,1))
+        n, img_h, img_w, ch_in      = img.shape
+        k_h, k_w, k_ch_in, ch_out   = kernel_flipped.shape
+
+        assert ch_in == k_ch_in
+        
+        output = np.empty((1,img_h, img_w, ch_out))
+        for i in range(ch_out):
+            out     = np.zeros((img_h, img_w))
+            for j in range (ch_in):
+                out += convolve2d(img[0,:,:,j],kernel_flipped[:,:,j,i],'same')
+            output[0,:,:,i] = out
+
+        return output
+
         
 # ----------------------- OTHER LAYERS ---------------------------------------
 
@@ -657,7 +674,7 @@ class MyMaxPool(MyLayer):
                              reduced_width, self.pool_size[1], depth)
         self.np_out_data = self.np_out_data.max(axis=2).max(axis=3)
 
-        self.np_out_data = self.encode(in_data)
+        self.np_out_data = self.encode(self.np_out_data)
         return self.np_out_data
         
     def keras_out(self,in_data):
