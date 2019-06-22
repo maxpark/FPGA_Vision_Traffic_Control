@@ -1,6 +1,7 @@
 module  com_adder(
     in_A,
     in_B,
+    rstn,
     out_ex,
     out_m
 );
@@ -13,6 +14,7 @@ localparam DATA_WIDTH = MANTISSA + EXPONENT;
 // IO definition
 input  [DATA_WIDTH-1:0] in_A;
 input  [DATA_WIDTH-1:0] in_B;
+input                   rstn;
 
 output [MANTISSA-1:0]    out_m;
 output [EXPONENT-1:0]   out_ex;
@@ -43,7 +45,7 @@ assign eB_eA                   = exponent_B - exponent_A;
 assign exp_A_large             = eA_eB[EXPONENT-1] ? 1'b0 : 1'b1;
 assign eA_eB_abs               = exp_A_large ? eA_eB : eB_eA ;
 assign mA_plus_mB              = shftr_mantissa_A_out + shftr_mantissa_B_out;
-assign max_eB_eA               = exp_A_large ? exponentA : exponentB;
+assign max_eB_eA               = exp_A_large ? exponent_A : exponent_B;
 assign out_ex                  = max_eB_eA - en;
 
 // Instantiations
@@ -56,11 +58,41 @@ shifter shifter(
     .out_mantissa_B(shftr_mantissa_B_out)
 );
 
-norm norm(
+norm2 norm(
     .in_mantissa(mA_plus_mB),
     .out_mantissa(out_m),
+    .rstn(rstn),
     .en_out(en)
 );
 
 
 endmodule
+
+/*
+add wave -position insertpoint  \
+sim:/com_adder/MANTISSA \
+sim:/com_adder/EXPONENT \
+sim:/com_adder/DATA_WIDTH \
+sim:/com_adder/in_A \
+sim:/com_adder/in_B \
+sim:/com_adder/rstn \
+sim:/com_adder/out_m \
+sim:/com_adder/out_ex \
+sim:/com_adder/mantissa_A \
+sim:/com_adder/mantissa_B \
+sim:/com_adder/mA_plus_mB \
+sim:/com_adder/shftr_mantissa_A_out \
+sim:/com_adder/shftr_mantissa_B_out \
+sim:/com_adder/exponent_A \
+sim:/com_adder/exponent_B \
+sim:/com_adder/eA_eB \
+sim:/com_adder/eB_eA \
+sim:/com_adder/max_eB_eA \
+sim:/com_adder/en \
+sim:/com_adder/eA_eB_abs \
+sim:/com_adder/exp_A_large
+
+force -freeze sim:/com_adder/in_A 0110110110101011 0
+force -freeze sim:/com_adder/in_B 0100110111000110 0
+force -freeze sim:/com_adder/rstn 1 0
+*/

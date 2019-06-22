@@ -8,24 +8,66 @@ z2
 !i10f 100
 cModel Technology
 Z0 dE:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/Modelsim
-vshifter
-!s110 1561133067
+vcom_adder
+Z1 !s110 1561209352
 !i10b 1
-!s100 NiR=RhDB`DS04[[EEXAHo1
-I7DJbFIR295TeS7hdPiQU02
-VDg1SIo80bB@j0V0VzS_@n1
+!s100 HnE8cg64MlcA33i<zzK_;3
+Iga>^QBTEGBc0^a[dMbRPS3
+Z2 VDg1SIo80bB@j0V0VzS_@n1
 R0
-w1561133044
-8E:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/shifter.v
-FE:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/shifter.v
+w1561209335
+8E:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/com_adder.v
+FE:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/com_adder.v
 L0 1
-OV;L;10.5b;63
+Z3 OV;L;10.5b;63
 r1
 !s85 0
 31
-!s108 1561133066.000000
+Z4 !s108 1561209352.000000
+!s107 E:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/com_adder.v|
+!s90 -reportprogress|300|-work|work|E:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/com_adder.v|
+!i113 1
+Z5 o-work work
+Z6 tCvgOpt 0
+vnorm2
+R1
+!i10b 1
+!s100 bzF]MJF@c<C06M8Y8ja^=3
+I;AnMlK8h?E;na;7Y=ozDF1
+R2
+R0
+w1561209282
+8E:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/norm2.v
+FE:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/norm2.v
+L0 1
+R3
+r1
+!s85 0
+31
+R4
+!s107 E:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/norm2.v|
+!s90 -reportprogress|300|-work|work|E:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/norm2.v|
+!i113 1
+R5
+R6
+vshifter
+R1
+!i10b 1
+!s100 iES;nWeW6I:>Fefk?GH9L0
+Ib?O7[DV:[N;baCKAQPeJh3
+R2
+R0
+w1561133526
+8E:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/shifter.v
+FE:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/shifter.v
+L0 1
+R3
+r1
+!s85 0
+31
+R4
 !s107 E:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/shifter.v|
 !s90 -reportprogress|300|-work|work|E:/Projects/FYP/GIT/FPGA_Vision_Traffic_Control/architecture/src/rukshan/shifter.v|
 !i113 1
-o-work work
-tCvgOpt 0
+R5
+R6
